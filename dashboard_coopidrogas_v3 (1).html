@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coopidrogas — Cierre Julio & Ago MTD 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+  :root{--c:#1A5E9A;--clt:#2878D6;--cbg:#EBF3FC;--dk:#0D1F2D;--mid:#1C3144;
+    --grn:#16A34A;--gnbg:#DCFCE7;--red:#DC2626;--rdbg:#FEE2E2;
+    --amb:#D97706;--abg:#FEF3C7;--g1:#F4F7F9;--g2:#E2E8ED;--g3:#8FA3B1;--w:#FFFFFF;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:var(--g1);color:var(--dk)}
+
+  .hdr{background:linear-gradient(135deg,var(--dk) 0%,#0F3A5E 100%);
+    padding:0 36px;display:flex;align-items:center;justify-content:space-between;height:70px}
+  .hdr-l{display:flex;align-items:center;gap:14px}
+  .hdr-ic{width:44px;height:44px;background:var(--clt);border-radius:10px;
+    display:flex;align-items:center;justify-content:center;font-size:22px}
+  .hdr-t h1{font-size:18px;font-weight:800;color:var(--w)}
+  .hdr-t p{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px}
+  .hdr-r{display:flex;gap:10px;align-items:center}
+  .bdg{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    color:rgba(255,255,255,.85);font-size:11px;padding:5px 14px;border-radius:20px;
+    font-family:'JetBrains Mono',monospace}
+  .bdg.hl{background:var(--clt);border-color:var(--clt)}
+  .btn-p{background:var(--clt);color:var(--w);border:none;padding:8px 16px;
+    border-radius:8px;font-size:12px;font-weight:600;cursor:pointer}
+
+  .ctrl{background:var(--mid);padding:0 36px;height:48px;
+    display:flex;align-items:center;gap:14px;border-bottom:2px solid var(--clt)}
+  .cl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g3)}
+  select{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+    color:var(--w);font-size:13px;padding:5px 12px;border-radius:6px;outline:none;
+    cursor:pointer;font-family:'Inter',sans-serif}
+  select option{background:var(--mid)}
+  .cdiv{width:1px;height:22px;background:rgba(255,255,255,.15);margin:0 4px}
+
+  .sec{padding:20px 36px 10px;display:flex;align-items:center;gap:10px}
+  .sec span{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g3)}
+  .sec::after{content:'';flex:1;height:1px;background:var(--g2)}
+
+  .kg5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:0 36px 18px}
+  .kg4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 36px 18px}
+  .kpi{background:var(--w);border-radius:12px;padding:16px 16px 12px;
+    border-top:3px solid var(--g2);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .kpi.b{border-top-color:var(--clt)}.kpi.g{border-top-color:var(--grn)}
+  .kpi.r{border-top-color:var(--red)}.kpi.a{border-top-color:var(--amb)}
+  .kl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--g3);margin-bottom:7px}
+  .kv{font-size:24px;font-weight:800;color:var(--dk);
+    font-family:'JetBrains Mono',monospace;line-height:1}
+  .kv.sm{font-size:18px}
+  .ks{font-size:11px;margin-top:5px}
+  .up{color:var(--grn);font-weight:600}.dn{color:var(--red);font-weight:600}.nt{color:var(--g3)}
+
+  .yoy3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 36px 18px}
+  .yc{background:var(--w);border-radius:12px;padding:16px 18px;
+    box-shadow:0 1px 4px rgba(0,0,0,.05);text-align:center;border-top:3px solid var(--clt)}
+  .yl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g3);margin-bottom:7px}
+  .y25{font-size:15px;font-weight:600;color:var(--g3);font-family:'JetBrains Mono',monospace}
+  .y26{font-size:22px;font-weight:800;color:var(--dk);font-family:'JetBrains Mono',monospace;margin-top:2px}
+  .ypct{font-size:14px;font-weight:800;margin-top:6px}
+  .yup{color:var(--grn)}.ydn{color:var(--red)}
+
+  .ch2{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 36px 18px}
+  .ch2b{display:grid;grid-template-columns:3fr 2fr;gap:14px;padding:0 36px 18px}
+  .cc{background:var(--w);border-radius:12px;padding:18px 20px;
+    box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .cht{font-size:13px;font-weight:700;color:var(--dk);margin-bottom:2px}
+  .chs{font-size:11px;color:var(--g3);margin-bottom:14px}
+  .cw{position:relative;width:100%}
+  .h220{height:220px}.h200{height:200px}.h260{height:260px}.h180{height:180px}
+  .lg{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+  .li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--g3)}
+  .ls{width:10px;height:10px;border-radius:2px}
+
+  .s5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:0 36px 18px}
+  .sc{background:var(--w);border-radius:12px;padding:14px 14px 12px;
+    box-shadow:0 1px 4px rgba(0,0,0,.05);border-top:3px solid var(--g2)}
+  .sc.t{border-top-color:var(--grn)}.sc.b{border-top-color:var(--red)}
+  .stag{display:inline-block;font-size:9px;font-weight:700;padding:2px 8px;
+    border-radius:20px;margin-bottom:7px;text-transform:uppercase}
+  .tt{background:var(--gnbg);color:var(--grn)}.bt{background:var(--rdbg);color:var(--red)}
+  .sn{font-size:11px;font-weight:700;color:var(--dk);margin-bottom:2px;line-height:1.3}
+  .sci{font-size:10px;color:var(--g3);margin-bottom:9px}
+  .stv{font-size:19px;font-weight:800;color:var(--dk);font-family:'JetBrains Mono',monospace}
+  .ss{font-size:10px;color:var(--g3);margin-top:3px}
+
+  .ins{margin:0 36px 24px;background:var(--cbg);border:1px solid #B8D4F0;
+    border-left:5px solid var(--clt);border-radius:10px;padding:16px 20px;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px 28px}
+  .ii{font-size:12px;color:var(--mid);line-height:1.6}
+  .ii strong{color:var(--c)}
+
+  footer{text-align:center;padding:18px;font-size:10px;color:var(--g3);
+    border-top:1px solid var(--g2);margin-top:4px}
+  @media print{.btn-p,.ctrl{display:none}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-l">
+    <div class="hdr-ic">🏥</div>
+    <div class="hdr-t">
+      <h1>Coopidrogas</h1>
+      <p>Reporte Ejecutivo · Cierre Julio 2026 + Agosto MTD · Farma CO</p>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="bdg hl" id="lbl-periodo">Julio 2026 — Mes cerrado</div>
+    <div class="bdg">Corte: 26 ago 2026</div>
+    <button class="btn-p" onclick="window.print()">⬇ PDF</button>
+  </div>
+</div>
+
+<div class="ctrl">
+  <span class="cl">Período</span>
+  <select id="sel-mes" onchange="render()">
+    <option value="7">Julio 2026 — Mes cerrado</option>
+    <option value="8">Agosto 2026 — MTD (corte 26 ago)</option>
+  </select>
+  <div class="cdiv"></div>
+  <span class="cl">Tendencia</span>
+  <select id="sel-metric" onchange="renderMain()">
+    <option value="tv">Total Value COP</option>
+    <option value="ords">Órdenes</option>
+  </select>
+</div>
+
+<div class="sec"><span id="sec-kpi">Indicadores clave — Julio 2026</span></div>
+<div class="kg5" id="kpis"></div>
+<div class="kg4" id="kpis2"></div>
+
+<!-- YOY solo julio -->
+<div id="yoy-section">
+  <div class="sec"><span>Julio 2026 vs Julio 2025 — Crecimiento YoY</span></div>
+  <div class="yoy3">
+    <div class="yc"><div class="yl">Total Value COP</div>
+      <div class="y25">$122.7M · Jul 2025</div>
+      <div class="y26">$370.5M · Jul 2026</div>
+      <div class="ypct yup">▲ +201.9% YoY</div>
+    </div>
+    <div class="yc"><div class="yl">Órdenes completadas</div>
+      <div class="y25">3.133 · Jul 2025</div>
+      <div class="y26">6.839 · Jul 2026</div>
+      <div class="ypct yup">▲ +118.3% YoY</div>
+    </div>
+    <div class="yc"><div class="yl">Cancel Rate (Farma · usuario)</div>
+      <div class="y25">4.9% · Jul 2025</div>
+      <div class="y26">8.3% · Jul 2026</div>
+      <div class="ypct ydn">▲ +3.4pp vs año anterior</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec"><span>Comparativo mes a mes 2025 vs 2026</span></div>
+<div class="ch2">
+  <div class="cc">
+    <div class="cht">Total Value COP — 2025 vs 2026</div>
+    <div class="chs">Ene–Jul · barras comparativas por año</div>
+    <div class="lg">
+      <span class="li"><span class="ls" style="background:#B8D4F0"></span>2025</span>
+      <span class="li"><span class="ls" style="background:#1A5E9A"></span>2026</span>
+    </div>
+    <div class="cw h220"><canvas id="c-yoy-tv"></canvas></div>
+  </div>
+  <div class="cc">
+    <div class="cht">Órdenes — 2025 vs 2026</div>
+    <div class="chs">Ene–Jul · comparativo anual</div>
+    <div class="lg">
+      <span class="li"><span class="ls" style="background:#B8D4F0"></span>2025</span>
+      <span class="li"><span class="ls" style="background:#1A5E9A"></span>2026</span>
+    </div>
+    <div class="cw h220"><canvas id="c-yoy-ords"></canvas></div>
+  </div>
+</div>
+
+<div class="sec"><span id="sec-tend">Tendencia diaria & Cancel Rate — Julio 2026</span></div>
+<div class="ch2b">
+  <div class="cc">
+    <div class="cht" id="main-title">Total Value COP diario — Julio 2026</div>
+    <div class="chs" id="main-sub">Cada barra = un día del mes</div>
+    <div class="cw h260"><canvas id="c-main"></canvas></div>
+  </div>
+  <div class="cc">
+    <div class="cht">Cancel Rate mensual — Farma · cancelado por usuario</div>
+    <div class="chs">Enero 2026 – corte agosto MTD · Snowflake PHARMACY</div>
+    <div class="cw h260"><canvas id="c-cr"></canvas></div>
+  </div>
+</div>
+
+<div class="ch2b" style="padding-top:0">
+  <div class="cc">
+    <div class="cht" id="city-title">TV por ciudad — Julio 2026</div>
+    <div class="chs">Top 8 ciudades · Total Value COP</div>
+    <div class="cw h200"><canvas id="c-city"></canvas></div>
+  </div>
+  <div style="display:none"></div>
+</div>
+
+<div class="sec"><span id="sec-top">Top 5 tiendas — Julio 2026</span></div>
+<div class="s5" id="top-stores"></div>
+
+<div class="sec"><span id="sec-bot">Bottom 5 tiendas — Julio 2026</span></div>
+<div class="s5" id="bot-stores"></div>
+
+<div class="ins" id="insights"></div>
+
+<!-- DIAGNÓSTICO AGOSTO — solo visible en agosto -->
+<div id="diagnostico-ago" style="display:none;margin:0 36px 24px">
+  <div class="sec" style="padding:0 0 10px"><span>Análisis de variación — Agosto MTD vs Julio 2026</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px">
+
+    <div style="background:var(--w);border-radius:12px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.05);border-top:3px solid var(--red)">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g3);margin-bottom:8px">Factor 1 — Tienda clave inactiva</div>
+      <div style="font-size:22px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--red)">-99.5%</div>
+      <div style="font-size:11px;font-weight:700;color:var(--dk);margin:6px 0 4px">Farmacenter Droguería Ciprés 1 · Bogotá</div>
+      <div style="font-size:11px;color:var(--g3);line-height:1.5">Segunda tienda en volumen durante julio ($16.6M · 164 órdenes). En agosto MTD registra únicamente $79.450 en 4 órdenes. Requiere validación inmediata de integración y estado operativo.</div>
+    </div>
+
+    <div style="background:var(--w);border-radius:12px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.05);border-top:3px solid var(--amb)">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g3);margin-bottom:8px">Factor 2 — Tiendas sin actividad</div>
+      <div style="font-size:22px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--amb)">50 tiendas</div>
+      <div style="font-size:11px;font-weight:700;color:var(--dk);margin:6px 0 4px">Activas en julio — sin órdenes en agosto</div>
+      <div style="font-size:11px;color:var(--g3);line-height:1.5">50 establecimientos con operación regular en julio no registran ninguna orden completada en el período agosto MTD. En conjunto representaron $7.5M y 180 órdenes en julio. Volumen no recuperado.</div>
+    </div>
+
+    <div style="background:var(--w);border-radius:12px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.05);border-top:3px solid var(--clt)">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g3);margin-bottom:8px">Factor 3 — Reducción de cobertura operativa</div>
+      <div style="font-size:22px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--clt)">279 → 249</div>
+      <div style="font-size:11px;font-weight:700;color:var(--dk);margin:6px 0 4px">Tiendas activas · -30 vs julio</div>
+      <div style="font-size:11px;color:var(--g3);line-height:1.5">La red operativa se redujo en 30 puntos de venta respecto a julio. El festivo del 17 de agosto (Batalla de Boyacá) generó adicionalmente una jornada con solo 22 tiendas activas y $1.97M en TV — equivalente a un día perdido operativamente.</div>
+    </div>
+
+  </div>
+
+  <div style="background:var(--dk);border-radius:12px;padding:20px 24px;display:grid;grid-template-columns:1fr 2fr;gap:20px;align-items:center">
+    <div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:8px">Impacto estimado en TV</div>
+      <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.5);font-family:'JetBrains Mono',monospace">Julio (mismo corte 1-26)</div>
+      <div style="font-size:28px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--w)">$337.5M</div>
+      <div style="font-size:13px;color:var(--g3);margin:4px 0 2px">Agosto MTD (1-26 ago)</div>
+      <div style="font-size:28px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#F87171">$208.0M</div>
+      <div style="font-size:13px;font-weight:800;color:#F87171;margin-top:6px">▼ -38.4% vs mismo corte</div>
+    </div>
+    <div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px">Acciones recomendadas</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="min-width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--w);flex-shrink:0">1</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.75);line-height:1.5"><strong style="color:var(--w)">Reactivar Farmacenter Ciprés 1 de inmediato</strong> — validar estado de integración, horarios y catálogo en plataforma. Potencial de recuperación: $8-10M en el cierre del mes.</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="min-width:20px;height:20px;background:var(--amb);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--w);flex-shrink:0">2</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.75);line-height:1.5"><strong style="color:var(--w)">Identificar las 50 tiendas sin actividad</strong> — determinar si corresponde a cierre temporal, problema de visibilidad en app o baja de catálogo. Priorizar las de mayor TV en julio.</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="min-width:20px;height:20px;background:var(--clt);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--w);flex-shrink:0">3</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.75);line-height:1.5"><strong style="color:var(--w)">Plan de cierre de mes</strong> — con 5 días hábiles restantes en agosto, recuperar el ritmo de $12-15M/día (nivel julio) requiere activar las tiendas inactivas y garantizar disponibilidad de catálogo en los puntos de venta ancla.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>Fuente: Venta diaria (archivo Rappi · TOTAL_VALUE COP · 388 tiendas) + Snowflake ORDER_DIMENSIONS (cancel rate cancelado por usuario · PHARMACY · clientes · ATC) · Coopidrogas · CO · Ene–Ago 2026</footer>
+
+<script>
+const fM = v=>v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>=1e3?'$'+Math.round(v/1e3)+'K':'$'+v;
+const fF = v=>'$'+Math.round(v).toLocaleString('es-CO');
+
+const TV26  =[364750908,458472500,508041489,411533077,477341346,388495267,370482605,207966464];
+const ORD26 =[8073,10044,10693,7001,8215,6978,6839,3771];
+const TV25  =[64934707,91378132,110579666,89043974,134826107,107933989,122732851];
+const ORD25 =[1856,2642,2949,2648,3661,2882,3133];
+const MONTHS=['Ene','Feb','Mar','Abr','May','Jun','Jul'];
+
+// Cancel rate por usuario (Farma · Snowflake)
+const CR26=[8.3,8.9,11.1,8.3,8.3,7.5,8.3,7.5];
+const CR25=[6.5,6.8,10.3,8.4,6.6,7.1,4.9,7.3,7.3,7.3,8.5,9.9];
+
+const JUL_TV =[17962935,14002687,9432009,11104313,11389267,15343737,10334485,9912091,13065105,14349103,27028105,9429007,9161811,10873668,10885362,12706870,11588915,27846411,8513794,7441650,16618324,7049225,7573220,10592620,24771026,8571985,7650363,8602748,4905173,6397992,5378604];
+const JUL_ORD=[309,269,198,239,242,272,223,244,280,289,309,204,219,260,228,257,228,334,175,166,269,158,175,168,241,162,183,155,124,140,119];
+const AGO_TV =[27934394,5355010,6167507,8002623,6419462,7413790,20845465,13248970,6931634,4705895,6746647,6638530,7937475,6535584,6419945,5569820,206100,8046631,6992408,8052932,4793341,6076203,5171291,6745179,7975915,7033713];
+const AGO_ORD=[267,126,138,163,149,146,234,196,126,95,144,137,165,143,135,113,3,173,139,153,116,139,126,159,155,131];
+const JUL_D=Array.from({length:31},(_,i)=>'D'+(i+1));
+const AGO_D=Array.from({length:26},(_,i)=>'D'+(i+1));
+
+const CITY={
+  7:{labs:['Bogotá','Bucaramanga','Cali','Medellín','Bello','Armenia','Barranquilla','Villavicencio'],tv:[222060980,26128577,21824488,20898958,15396075,14041335,10712764,6294719]},
+  8:{labs:['Bogotá','Bello','Bucaramanga','Cali','Armenia','Medellín','Barranquilla','Villavicencio'],tv:[125023207,15440697,14675712,12293710,12159031,8322926,4152752,2933850]}
+};
+
+const TOP5={
+  7:[[900469203,'Paguemenos 1.5','Bogotá',51852700,286],[900478242,'Farmacenter Ciprés 1','Bogotá',23325750,182],[900450676,'Castillo de los Rosales','Bogotá',17563645,178],[900488471,'Droguería Ética','Bello',10414646,178],[900475650,'Droguería Municipal #1','Armenia',10199495,192]],
+  8:[[900469203,'Paguemenos 1.5','Bogotá',41803870,268],[900450676,'Castillo de los Rosales','Bogotá',14052133,191],[900488471,'Droguería Ética','Bello',12786711,201],[900475650,'Droguería Municipal #1','Armenia',9404566,161],[900450692,'Santa Helenita','Bogotá',6103493,103]]
+};
+const BOT5={
+  7:[[900171460,'Farmamolinos 32959','Medellín',311200,10,'10 días'],[900451193,'Surtifamiliar G J','Bogotá',313400,10,'10 días'],[900135610,'Empresarial N2 27771','Barranquilla',368710,12,'10 días'],[900475148,'Droguería Ciprés','Bogotá',433820,18,'14 días'],[900279983,'Futurama 3','Bogotá',454200,12,'10 días']],
+  8:[[900475145,'Econodrogas','Villavicencio',119000,5,'5 días'],[900122322,'Farmacenter Bosman','Bogotá',120151,6,'6 días'],[900108568,'La Pola 33550','Ibagué',122825,5,'5 días'],[900488491,'Drog. Yabur','Medellín',124900,6,'6 días'],[900470303,'Guabinal 40150','Ibagué',136100,8,'6 días']]
+};
+
+const META={
+  7:{clientes:6062,nuevos:3880,busq:44606,atc:21785,atc_pct:48.8,cr:8.3,tiendas:279,aov:54220},
+  8:{clientes:3381,nuevos:1996,busq:52672,atc:27373,atc_pct:52.0,cr:7.5,tiendas:249,aov:53031}
+};
+
+const CH={};
+function mk(id,cfg){if(CH[id])CH[id].destroy();CH[id]=new Chart(document.getElementById(id),cfg);}
+
+// ── YoY estáticos ──
+mk('c-yoy-tv',{type:'bar',data:{labels:MONTHS,datasets:[
+  {label:'2025',data:TV25,backgroundColor:'#B8D4F0',borderRadius:3,barPercentage:.4,categoryPercentage:.85},
+  {label:'2026',data:TV26.slice(0,7),backgroundColor:'#1A5E9A',borderRadius:3,barPercentage:.4,categoryPercentage:.85}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+fM(c.raw)}}},scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#9AABB8'},border:{display:false}},y:{grid:{color:'rgba(0,0,0,0.04)'},border:{display:false},ticks:{font:{size:10},color:'#9AABB8',callback:v=>fM(v),maxTicksLimit:5}}}}});
+
+mk('c-yoy-ords',{type:'bar',data:{labels:MONTHS,datasets:[
+  {label:'2025',data:ORD25,backgroundColor:'#B8D4F0',borderRadius:3,barPercentage:.4,categoryPercentage:.85},
+  {label:'2026',data:ORD26.slice(0,7),backgroundColor:'#1A5E9A',borderRadius:3,barPercentage:.4,categoryPercentage:.85}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+c.raw+' órd.'}}},scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#9AABB8'},border:{display:false}},y:{grid:{color:'rgba(0,0,0,0.04)'},border:{display:false},ticks:{font:{size:10},color:'#9AABB8',maxTicksLimit:5}}}}});
+
+// ── Cancel Rate — gráfica de línea estática ──
+mk('c-cr',{type:'line',data:{
+  labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago'],
+  datasets:[
+    {label:'2025',data:[6.5,6.8,10.3,8.4,6.6,7.1,4.9,7.3],
+      borderColor:'#B8D4F0',backgroundColor:'transparent',
+      borderWidth:2,pointRadius:5,pointBackgroundColor:'#B8D4F0',
+      pointBorderColor:'#1A5E9A',pointBorderWidth:1.5,tension:0.3},
+    {label:'2026',data:CR26,
+      borderColor:'#1A5E9A',backgroundColor:'rgba(26,94,154,0.07)',
+      borderWidth:2.5,pointRadius:6,pointBackgroundColor:'#1A5E9A',
+      fill:true,tension:0.3}
+  ]
+},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:true,position:'top',labels:{font:{size:11},color:'#1C2B3A',padding:12}},
+    tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+c.raw+'%'}}},
+  scales:{
+    x:{grid:{display:false},border:{display:false},ticks:{font:{size:10},color:'#9AABB8'}},
+    y:{grid:{color:'rgba(0,0,0,0.04)'},border:{display:false},min:0,max:14,
+      ticks:{font:{size:10},color:'#9AABB8',callback:v=>v+'%',maxTicksLimit:6}}
+  }
+}});
+
+function renderMain(){
+  const m=parseInt(document.getElementById('sel-mes').value);
+  const isTV=document.getElementById('sel-metric').value==='tv';
+  const isJul=m===7;
+  const tv_d=isJul?JUL_TV:AGO_TV;
+  const ord_d=isJul?JUL_ORD:AGO_ORD;
+  const days=isJul?JUL_D:AGO_D;
+  const data=isTV?tv_d:ord_d;
+  const maxV=Math.max(...data);
+  const mes=isJul?'Julio':'Agosto';
+  document.getElementById('main-title').textContent=(isTV?'Total Value COP diario':'Órdenes diarias')+' — '+mes+' 2026';
+  document.getElementById('main-sub').textContent=isJul?'Julio completo — 31 días':'Agosto MTD — 26 días · día 17 festivo';
+  mk('c-main',{type:'bar',data:{labels:days,datasets:[{
+    label:isTV?'TV COP':'Órdenes',data,
+    backgroundColor:data.map((v,i)=>{
+      if(!isJul&&i===16) return '#CBD5E0';
+      return v===maxV?'#16A34A':'#1A5E9A';
+    }),
+    borderRadius:3,barPercentage:.7
+  }]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+(isTV?fF(c.raw):c.raw+' órd.')}}},
+    scales:{
+      x:{grid:{display:false},ticks:{font:{size:9},color:'#9AABB8',maxRotation:0,autoSkip:true,maxTicksLimit:16},border:{display:false}},
+      y:{grid:{color:'rgba(0,0,0,0.04)'},border:{display:false},ticks:{font:{size:10},color:'#9AABB8',callback:v=>isTV?fM(v):v,maxTicksLimit:5}}
+    }}});
+}
+
+function renderCity(){
+  const m=parseInt(document.getElementById('sel-mes').value);
+  const isJul=m===7;
+  const c=CITY[m];
+  document.getElementById('city-title').textContent='TV por ciudad — '+(isJul?'Julio':'Agosto MTD')+' 2026';
+  mk('c-city',{type:'bar',data:{labels:c.labs,datasets:[{
+    label:'TV COP',data:c.tv,
+    backgroundColor:['#1A5E9A','#2878D6','#2878D6','#2878D6','#5B9FD4','#5B9FD4','#8EC0E8','#B8D4F0'],
+    borderRadius:4,barPercentage:.6
+  }]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+fM(c.raw)}}},
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,0.04)'},border:{display:false},ticks:{font:{size:9},color:'#9AABB8',callback:v=>fM(v)}},
+      y:{grid:{display:false},border:{display:false},ticks:{font:{size:10},color:'#1C2B3A'}}
+    }}});
+}
+
+function renderStores(){
+  const m=parseInt(document.getElementById('sel-mes').value);
+  const mes=m===7?'Julio':'Agosto MTD';
+  document.getElementById('sec-top').textContent=`Top 5 tiendas — ${mes} 2026`;
+  document.getElementById('sec-bot').textContent=`Bottom 5 tiendas — ${mes} 2026`;
+  const tEl=document.getElementById('top-stores'); tEl.innerHTML='';
+  TOP5[m].forEach(([id,name,city,tv,ords],i)=>{
+    tEl.innerHTML+=`<div class="sc t"><span class="stag tt">Top ${i+1}</span>
+      <div class="sn">${name}</div><div class="sci">${city}</div>
+      <div class="stv">${fM(tv)}</div>
+      <div class="ss">${ords} órd · ${fM(Math.round(tv/ords))} AOV</div></div>`;
+  });
+  const bEl=document.getElementById('bot-stores'); bEl.innerHTML='';
+  BOT5[m].forEach(([id,name,city,tv,ords,dias],i)=>{
+    bEl.innerHTML+=`<div class="sc b"><span class="stag bt">Bottom ${i+1}</span>
+      <div class="sn">${name}</div><div class="sci">${city} · ${dias}</div>
+      <div class="stv">${fM(tv)}</div><div class="ss">${ords} órdenes</div></div>`;
+  });
+}
+
+function renderKPIs(){
+  const m=parseInt(document.getElementById('sel-mes').value);
+  const isJul=m===7;
+  const tv=TV26[m-1],ords=ORD26[m-1],tv_p=TV26[m-2],ord_p=ORD26[m-2];
+  const meta=META[m];
+  const dTV=Math.round((tv-tv_p)/tv_p*100*10)/10;
+  const dOrd=Math.round((ords-ord_p)/ord_p*100*10)/10;
+  const lbl=isJul?'Julio 2026 — Mes cerrado':'Agosto 2026 MTD — corte 26 ago';
+  const vsLbl=isJul?'jun':'jul';
+  document.getElementById('lbl-periodo').textContent=lbl;
+  document.getElementById('sec-kpi').textContent='Indicadores clave — '+lbl;
+  document.getElementById('sec-tend').textContent='Tendencia diaria & Cancel Rate — '+(isJul?'Julio':'Agosto')+' 2026';
+  document.getElementById('yoy-section').style.display=isJul?'':'none';
+
+  document.getElementById('kpis').innerHTML=`
+    <div class="kpi b"><div class="kl">Total Value COP</div>
+      <div class="kv sm">${fM(tv)}</div>
+      <div class="ks ${dTV>=0?'up':'dn'}">${dTV>=0?'▲':'▼'} ${Math.abs(dTV)}% vs ${vsLbl}</div></div>
+    <div class="kpi g"><div class="kl">Órdenes completadas</div>
+      <div class="kv">${ords.toLocaleString('es-CO')}</div>
+      <div class="ks ${dOrd>=0?'up':'dn'}">${dOrd>=0?'▲':'▼'} ${Math.abs(dOrd)}% vs ${vsLbl}</div></div>
+    <div class="kpi a"><div class="kl">Cancel Rate — Farma</div>
+      <div class="kv">${meta.cr}%</div>
+      <div class="ks nt">Cancelaciones por usuario · Snowflake PHARMACY</div></div>
+    <div class="kpi"><div class="kl">AOV</div>
+      <div class="kv sm">${fM(meta.aov)}</div>
+      <div class="ks nt">Ticket promedio por orden completada</div></div>
+    <div class="kpi"><div class="kl">Tiendas activas</div>
+      <div class="kv">${meta.tiendas}</div>
+      <div class="ks nt">${isJul?'vs 300 jun 2026':'vs 279 jul 2026'}</div></div>`;
+
+  document.getElementById('kpis2').innerHTML=`
+    <div class="kpi g"><div class="kl">Clientes únicos</div>
+      <div class="kv">${meta.clientes.toLocaleString('es-CO')}</div>
+      <div class="ks nt">Con al menos 1 orden completada</div></div>
+    <div class="kpi g"><div class="kl">Clientes nuevos</div>
+      <div class="kv">${meta.nuevos.toLocaleString('es-CO')}</div>
+      <div class="ks up">Primera compra en ${isJul?'julio':'agosto'}</div></div>
+    <div class="kpi b"><div class="kl">Búsquedas en app</div>
+      <div class="kv sm">${meta.busq.toLocaleString('es-CO')}</div>
+      <div class="ks nt">Usuarios que buscaron Coopidrogas</div></div>
+    <div class="kpi g"><div class="kl">ATC Conv. %</div>
+      <div class="kv">${meta.atc_pct}%</div>
+      <div class="ks up">${meta.atc.toLocaleString('es-CO')} búsquedas → carrito</div></div>`;
+
+  document.getElementById('insights').innerHTML = isJul
+    ? `<div class="ii"><strong>TV julio $370.5M:</strong> -4.6% vs junio ($388.5M) pero +201.9% vs julio 2025. El canal digital de Coopidrogas se triplicó en un año.</div>
+       <div class="ii"><strong>Paguemenos 1.5 — tienda ancla:</strong> $51.9M en julio, 14% del TV total con solo 286 órdenes. AOV de $181K, el más alto del top 5.</div>
+       <div class="ii"><strong>3.880 clientes nuevos en julio:</strong> 64% de los clientes activos compraron por primera vez. La recurrencia es la palanca del siguiente mes.</div>
+       <div class="ii"><strong>ATC 48.8% — muy sólido:</strong> casi 1 de cada 2 usuarios que busca Coopidrogas agrega al carrito. Indica buena disponibilidad y posicionamiento.</div>
+       <div class="ii"><strong>Bogotá concentra el 59.9% del TV:</strong> $222M de $370M totales. Bucaramanga, Cali y Medellín son las plazas de mayor crecimiento potencial.</div>
+       <div class="ii"><strong>Cancel Rate 8.3%:</strong> cancelaciones por usuario · Farma. Estable vs junio (7.5%) y en rango normal del canal.</div>`
+    : `<div class="ii"><strong>TV ago MTD $208M (26 días):</strong> ritmo de $8M/día. Proyecta ~$248M al cierre de agosto.</div>
+       <div class="ii"><strong>ATC mejora a 52% en agosto:</strong> sube 3.2pp vs julio (48.8%). Más usuarios convierten al carrito.</div>
+       <div class="ii"><strong>Cancel Rate 7.5% agosto MTD:</strong> mejor que julio (8.3%) y en tendencia positiva.</div>
+       <div class="ii"><strong>1.996 clientes nuevos:</strong> captación sólida en 26 días proporcional al ritmo de julio.</div>`;
+}
+
+function render(){
+  renderKPIs();renderMain();renderCity();renderStores();
+  const m=parseInt(document.getElementById('sel-mes').value);
+  document.getElementById('diagnostico-ago').style.display = m===8 ? '' : 'none';
+}
+render();
+</script>
+</body>
+</html>
